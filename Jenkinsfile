@@ -8,10 +8,12 @@ pipeline {
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
-    stage('Provision instances') {
-        steps {
-            sh 'echo "test"'
-            sh 'touch testfile'
+    stages {
+        stage('Provision instances') {
+            steps {
+                sh 'echo "test"'
+                sh 'touch testfile'
+            }
         }
     }
 }
