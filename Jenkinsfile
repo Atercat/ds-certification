@@ -4,8 +4,6 @@ pipeline {
         string(name: "OS_PASSWORD", trim: true, description: "OpenStack password")
         string(name: "OS_PROJECT_ID", trim: true, description: "OpenStack project ID")
     }
-    environment {
-    }
     agent {
         dockerfile {
             filename 'Dockerfile.worker'
