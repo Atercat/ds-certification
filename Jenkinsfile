@@ -5,7 +5,7 @@ pipeline {
         string(name: "OS_PROJECT_ID", trim: true, description: "OpenStack project ID")
     }
     environment {
-        HOME = '${WORKSPACE}/files'
+        HOME = '/var/lib/jenkins/workspace/ds-certification/files'
     }
     agent {
         dockerfile {
