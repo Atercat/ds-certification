@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
-                sh 'pwd ~' // debug line
+                sh 'echo ${HOME}' // debug line
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
                 }
