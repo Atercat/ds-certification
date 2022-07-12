@@ -12,10 +12,23 @@ pipeline {
         }
     }
     stages {
-        stage('Provision instances') {
+        stage('Provision a builder instance') {
             steps {
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
+                    script {
+                        BUILDER_IP = sh(
+                            script: 'terraform output -raw ip',
+                            returnStdout: true
+                        )
+                    }
+                }
+            }
+        }
+        stage('The Builder instance setting') {
+            steps {
+                sshagent(['wsl']) {
+                    ansiblePlaybook disableHostKeyChecking: true, playbook: 'ansible/main.yaml'
                 }
             }
         }

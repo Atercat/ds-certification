@@ -1,0 +1,34 @@
+---
+- name: Filling in inventory
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Add build host
+      ansible.builtin.add_host:
+        hostname: "{{ BUILDER_IP }}"
+        groups: builder
+
+
+- name: Preparing the node
+  hosts: builder
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Waiting for the instance is reachable
+      ansible.builtin.wait_for_connection:
+
+    - name: Gathering facts for the first time
+      ansible.builtin.setup:
+
+    - name: Ensure Docker is installed
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - python3-docker
+        state: present
+        update_cache: true
+
+    - name: Ensure Docker service is running
+      ansible.builtin.service:
+        name: docker
+        state: started
