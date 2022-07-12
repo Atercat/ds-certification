@@ -9,7 +9,7 @@ pipeline {
         stage('Provision instances') {
             steps {
                 dir('/git') {
-                    checkout scm
+                    git branch: 'dev', url: 'https://github.com/Atercat/ds-certification.git'
                 }
                 sh 'ls -halR /git'
             }
