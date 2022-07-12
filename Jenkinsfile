@@ -8,10 +8,8 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
-                dir('/git') {
-                    git branch: 'dev', url: 'https://github.com/Atercat/ds-certification.git'
-                }
-                sh 'ls -halR /git'
+                git branch: 'dev', url: 'https://github.com/Atercat/ds-certification.git'
+                sh 'ls -hal'
             }
         }
     }
