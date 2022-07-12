@@ -1,8 +1,8 @@
 pipeline {
     agent {
         dockerfile {
-            filename 'Dockerfile'
-            dir 'build'
+            filename 'Dockerfile.worker'
+            dir 'files'
         }
     }
     stages {
