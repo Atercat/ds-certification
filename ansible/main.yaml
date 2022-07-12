@@ -1,6 +1,7 @@
 ---
 - name: Filling in inventory
   hosts: localhost
+  become: true
   gather_facts: false
   tasks:
     - name: Add build host
