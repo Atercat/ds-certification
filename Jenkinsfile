@@ -5,7 +5,7 @@ pipeline {
         string(name: "OS_PROJECT_ID", trim: true, description: "OpenStack project ID")
     }
     environment {
-        TF_CLI_CONFIG_FILE = 'files/terraform-mirror'
+        TF_CLI_CONFIG_FILE = 'files/terraform-mirror.tfrc'
     }
     agent {
         dockerfile {
