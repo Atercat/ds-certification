@@ -4,6 +4,9 @@ pipeline {
         string(name: "OS_PASSWORD", trim: true, description: "OpenStack password")
         string(name: "OS_PROJECT_ID", trim: true, description: "OpenStack project ID")
     }
+    environment {
+        HOME = '${WORKSPACE}/files'
+    }
     agent {
         dockerfile {
             filename 'Dockerfile.worker'
@@ -14,7 +17,6 @@ pipeline {
         stage('Provision instances') {
             steps {
                 sh 'echo ${HOME}' // debug line
-                sh 'cp files/.terraformrc /'
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
                 }
