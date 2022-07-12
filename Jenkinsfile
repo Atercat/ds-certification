@@ -14,6 +14,7 @@ pipeline {
         stage('Provision instances') {
             steps {
                 sh 'echo ${HOME}' // debug line
+                sh 'cp files/.terraformrc /'
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
                 }
