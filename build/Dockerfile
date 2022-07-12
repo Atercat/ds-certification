@@ -9,3 +9,5 @@ RUN python3 -m ensurepip --upgrade \
 
 # Remove ENTRYPOINT
 ENTRYPOINT []
+
+CMD [ "/bin/sh" ]
