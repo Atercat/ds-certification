@@ -8,12 +8,12 @@ pipeline {
         dockerfile {
             filename 'Dockerfile.worker'
             dir 'files'
+            args '-e "HOME=${WORKSPACE}/files"'
         }
     }
     stages {
         stage('Provision instances') {
             steps {
-                sh 'export HOME=${WORKSPACE}/files'
                 sh 'echo ${HOME}' // debug line
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
