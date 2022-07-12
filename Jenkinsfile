@@ -8,8 +8,10 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
-                sh 'echo "test"'
-                sh 'touch testfile'
+                dir('/git') {
+                    checkout scm
+                }
+                sh 'ls -halR /git'
             }
         }
     }
