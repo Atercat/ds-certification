@@ -13,8 +13,9 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
+                sh 'cp files/terraform-mirror ~/.terraformrc'
                 dir('terraform') {
-                    sh 'terraform plan && terraform apply -auto-approve'
+                    sh 'terraform init && terraform plan && terraform apply -auto-approve'
                 }
             }
         }
