@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
-                sh 'cp files/terraform-mirror.tfrc /root/.terraformrc'
+                sh 'pwd ~' // debug line
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
                 }
