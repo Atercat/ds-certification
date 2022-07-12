@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
-                sh 'HOME=${WORKSPACE}/files'
+                sh 'HOME=${WORKSPACE}/files echo ${HOME} && echo ${HOME}'
                 sh 'echo ${HOME}' // debug line
                 dir('terraform') {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
