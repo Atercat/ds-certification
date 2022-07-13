@@ -22,6 +22,7 @@ pipeline {
 		)
         credentials(
             name: 'KEY_PAIR',
+            defaultValue: '',
             credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
             required: true
         )
