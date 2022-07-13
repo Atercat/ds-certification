@@ -3,17 +3,33 @@ pipeline {
         string(
 			name: 'OS_USERNAME',
             trim: true,
-            description: 'OpenStack user name'
+            description: 'OpenStack user name',
+            required: true
 		)
         password(
 			name: 'OS_PASSWORD',
-			description: 'OpenStack password'
+			description: 'OpenStack password',
+            required: true
 		)
         string(
 			name: 'OS_PROJECT_ID',
 			trim: true,
-			description: 'OpenStack project ID'
+			description: 'OpenStack project ID',
+            required: true
 		)
+        string(
+			name: 'KEY_NAME',
+			trim: true,
+			description: 'Cloud SSH-key name',
+            required: true
+		)
+        credentials(
+            name: 'KEY_PAIR',
+            defaultValue: '',
+            credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
+			description: 'Key pair credential corresponding to the KEY_NAME parameter',
+            required: true
+        )
         string(
 			name: 'DOCKER_REGISTRY',
 			defaultValue: 'https://index.docker.io/v1/',
@@ -21,9 +37,10 @@ pipeline {
 			description: 'Docker registry URL'
 		)
         credentials(
-            name: 'KEY_PAIR',
+            name: 'REGISTRY_CRED',
             defaultValue: '',
-            credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
+            credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
+			description: 'Docker registry credentials',
             required: true
         )
     }
