@@ -1,13 +1,17 @@
+variable "key_name" {
+    type = string
+}
+
 module "builder" {
     source = "./modules/vk"
     name = "builder"
-    key_pair = "wsl"
+    key_pair = var.key_name
 }
 
 module "runner" {
     source = "./modules/vk"
     name = "runner"
-    key_pair = "wsl"
+    key_pair = var.key_name
 }
 
 output "builder_ip" {

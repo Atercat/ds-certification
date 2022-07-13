@@ -58,7 +58,7 @@ pipeline {
                 dir('terraform') {
                     sh '''
                         terraform init &&
-                        terraform plan &&
+                        terraform plan -var 'key_name=${KEY_NAME}' &&
                         terraform apply -auto-approve
                     '''
                     script {
@@ -72,7 +72,7 @@ pipeline {
         }
         stage('Instances setting') {
             environment {
-                REPO_CREDS = credentials('docker')
+                REPO_CREDS = params.REGISTRY_CRED
             }
             steps {
                 sshagent([params.KEY_PAIR]) {
