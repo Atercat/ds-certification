@@ -18,11 +18,13 @@ pipeline {
                     sh 'terraform init && terraform plan && terraform apply -auto-approve'
                     script {
                         BUILDER_IP = sh(
-                            script: 'terraform output -raw ip',
+                            script: 'terraform output ip',
                             returnStdout: true
-                        )
+                        ).trim()
                     }
                     sh 'echo ${BUILDER_IP}'
+                    sh 'terraform output ip'
+                    sh 'terraform output -raw ip'
                 }
             }
         }
