@@ -5,7 +5,7 @@ pipeline {
             trim: true,
             description: 'OpenStack user name'
 		)
-        string(
+        password(
 			name: 'OS_PASSWORD',
 			trim: true,
 			description: 'OpenStack password'
@@ -21,6 +21,11 @@ pipeline {
 			trim: true,
 			description: 'Docker registry URL'
 		)
+        credentials(
+            name: 'KEY_PAIR',
+            credentialType: 'SSH Username with private key',
+            required: true
+        )
     }
     agent {
         dockerfile {
@@ -53,7 +58,7 @@ pipeline {
                 REPO_CREDS = credentials('docker')
             }
             steps {
-                sshagent(['wsl']) {
+                sshagent([${KEY_PAIR}]) {
                     ansiblePlaybook playbook: 'ansible/main.yaml',
                         disableHostKeyChecking: true,
                         extras: '
