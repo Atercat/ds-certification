@@ -3,15 +3,23 @@
   hosts: localhost
   gather_facts: false
   tasks:
-    - name: Add build host
+    - name: Add the build host
       ansible.builtin.add_host:
         hostname: "{{ BUILDER_IP }}"
         groups: builder
         ansible_user: ubuntu
 
+    - name: Add the run host
+      ansible.builtin.add_host:
+        hostname: "{{ RUNNER_IP }}"
+        groups: runner
+        ansible_user: ubuntu
 
-- name: Preparing the node
-  hosts: builder
+
+- name: Preparing the nodes
+  hosts:
+    - builder
+    - runner
   become: true
   gather_facts: false
   tasks:
@@ -33,3 +41,54 @@
       ansible.builtin.service:
         name: docker
         state: started
+
+
+- name: Building the App
+  hosts: builder
+  become: true
+  vars:
+    repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+    repo_path: /var/repo
+    app: hello-1.0 # todo: extract the name from pom.xml
+    war_path: "{{ repo_path }}/target/{{ app }}.war"
+  tasks:
+    - name: Clone the Git repo
+      ansible.builtin.git:
+        repo: "{{ repo }}"
+        dest: "{{ repo_path }}"
+        force: true
+
+    - name: Start a Maven container and build an artifact
+      community.docker.docker_container:
+        name: builder
+        image: maven:3.6-openjdk-8
+        volumes: "{{ repo_path }}:/git"
+        command: mvn -f /git/pom.xml clean package
+        restart: true
+        detach: false
+
+    - name: Ensure the newly built artifact is present
+      ansible.builtin.file:
+        path: "{{ war_path }}"
+
+    - name: Copy the Dockerfile to the Build-node
+      ansible.builtin.copy:
+        src: files/Dockerfile.runner
+        dest: "{{ repo_path }}"
+
+    - name: Login to the repository
+      community.docker.docker_login:
+        registry: "{{ DOCKER_REGISTRY }}"
+        username: "{{ DOCKER_USER }}"
+        password: "{{ DOCKER_PASSWORD }}"
+        reauthorize: true
+
+    - name: Build a production image and push it to the repository
+      community.docker.docker_image:
+        name: "{{ hostvars.localhost.repo_facts.repository.repositoryUri }}"
+        source: build
+        build:
+          path: "{{ repo_path }}"
+          args:
+            artifact: target/{{ app }}.war
+        push: true
