@@ -6,21 +6,23 @@ pipeline {
     }
     agent {
         dockerfile {
-            filename 'Dockerfile.worker'
+            filename 'Dockerfile.agent'
             dir 'files'
-            args '-e "HOME=${WORKSPACE}/files"'
+            args '-v files/.terraformrc:/home/jenkins/.terraformrc'
         }
     }
     stages {
         stage('Provision a builder instance') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init && terraform plan && terraform apply -auto-approve'
+                    sh '''
+                        terraform init &&
+                        terraform plan &&
+                        terraform apply -auto-approve'
+                    '''
                     script {
-                        env.BUILDER_IP = sh(
-                            script: 'terraform output -raw ip',
-                            returnStdout: true
-                        )
+                        env.BUILDER_IP = sh returnStdout: true,
+                            script: 'terraform output -raw ip'
                     }
                 }
             }
@@ -28,7 +30,9 @@ pipeline {
         stage('The Builder instance setting') {
             steps {
                 sshagent(['wsl-work']) {
-                    ansiblePlaybook disableHostKeyChecking: true, extras: '-vvv -e BUILDER_IP=${BUILDER_IP}', playbook: 'ansible/main.yaml'
+                    ansiblePlaybook playbook: 'ansible/main.yaml',
+                        disableHostKeyChecking: true,
+                        extras: '-e BUILDER_IP=${BUILDER_IP}'
                 }
             }
         }
