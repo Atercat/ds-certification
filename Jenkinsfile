@@ -7,7 +7,6 @@ pipeline {
 		)
         password(
 			name: 'OS_PASSWORD',
-			trim: true,
 			description: 'OpenStack password'
 		)
         string(
