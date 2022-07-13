@@ -56,7 +56,7 @@ pipeline {
                 sshagent(['wsl-work']) {
                     ansiblePlaybook playbook: 'ansible/main.yaml',
                         disableHostKeyChecking: true,
-                        extras: '-e BUILDER_IP=${BUILDER_IP} -e RUNNER_IP=${RUNNER_IP} -e DOCKER_REGISTRY=${DOCKER_REGISTRY} -e DOCKER_USER=${REPO_CREDS_USR} -e DOCKER_PASSWORD=${REPO_CREDS_PSW}'
+                        extras: '-vvv -e BUILDER_IP=${BUILDER_IP} -e RUNNER_IP=${RUNNER_IP} -e DOCKER_REGISTRY=${DOCKER_REGISTRY} -e DOCKER_USER=${REPO_CREDS_USR} -e DOCKER_PASSWORD=${REPO_CREDS_PSW}'
                 }
             }
         }

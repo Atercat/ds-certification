@@ -92,7 +92,7 @@
         build:
           path: "{{ repo_path }}"
           args:
-            artifact: target/{{ app }}.war
+            artifact: "target/{{ app }}.war"
         push: true
 
 
