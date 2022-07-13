@@ -29,13 +29,16 @@
     - name: Gathering facts for the first time
       ansible.builtin.setup:
 
+    - name: Update packages cache
+      ansible.builtin.apt:
+        update_cache: true
+
     - name: Ensure Docker is installed
       ansible.builtin.apt:
         name:
           - docker.io
           - python3-docker
         state: present
-        update_cache: true
 
     - name: Ensure Docker service is running
       ansible.builtin.service:
