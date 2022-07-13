@@ -22,13 +22,16 @@ pipeline {
                             returnStdout: true
                         )
                     }
+                    sh 'echo ${BUILDER_IP}'
                 }
             }
         }
         stage('The Builder instance setting') {
             steps {
+                sh 'echo ${BUILDER_IP}'
                 sshagent(['wsl']) {
-                    ansiblePlaybook disableHostKeyChecking: true, extras: '-vvv -e BUILDER_IP=${BUILDER_IP}', playbook: 'ansible/main.yaml'
+                    sh 'echo ${BUILDER_IP}'
+                    //ansiblePlaybook disableHostKeyChecking: true, extras: '-vvv -e BUILDER_IP=${BUILDER_IP}', playbook: 'ansible/main.yaml'
                 }
             }
         }
