@@ -71,9 +71,9 @@ pipeline {
             }
         }
         stage('Instances setting') {
-            environment {
-                REPO_CREDS = params.REGISTRY_CRED
-            }
+            //environment {
+            //    REPO_CREDS = params.REGISTRY_CRED
+            //}
             steps {
                 sshagent([params.KEY_PAIR]) {
                     ansiblePlaybook playbook: 'ansible/main.yaml',
@@ -82,8 +82,8 @@ pipeline {
                             -e BUILDER_IP=${BUILDER_IP}
                             -e RUNNER_IP=${RUNNER_IP}
                             -e DOCKER_REGISTRY=${DOCKER_REGISTRY}
-                            -e DOCKER_USER=${REPO_CREDS_USR}
-                            -e DOCKER_PASSWORD=${REPO_CREDS_PSW}
+                            -e DOCKER_USER=${REGISTRY_CRED_USR}
+                            -e DOCKER_PASSWORD=${REGISTRY_CRED_PSW}
                         '''
                 }
             }
