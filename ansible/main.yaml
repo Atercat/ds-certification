@@ -45,6 +45,12 @@
         name: docker
         state: started
 
+    - name: Login to the repository
+      community.docker.docker_login:
+        registry: "{{ DOCKER_REGISTRY }}"
+        username: "{{ DOCKER_USER }}"
+        password: "{{ DOCKER_PASSWORD }}"
+
 
 - name: Building the App
   hosts: builder
@@ -79,13 +85,6 @@
         src: ../files/Dockerfile.runner
         dest: "{{ repo_path }}/Dockerfile"
 
-    - name: Login to the repository
-      community.docker.docker_login:
-        registry: "{{ DOCKER_REGISTRY }}"
-        username: "{{ DOCKER_USER }}"
-        password: "{{ DOCKER_PASSWORD }}"
-        reauthorize: true
-
     - name: Build a production image and push it to the repository
       community.docker.docker_image:
         name: "{{ DOCKER_USER }}/myboxfuse"
@@ -95,3 +94,25 @@
           args:
             artifact: target/{{ app }}.war
         push: true
+
+
+- name: Deploying the app
+  hosts: runner
+  become: true
+  tasks:
+    - name: Remove the old container
+      community.docker.docker_container:
+        name: runner
+        state: absent
+
+    - name: Remove the old image
+      community.docker.docker_image:
+        name: "{{ DOCKER_USER }}/myboxfuse"
+        state: absent
+
+    - name: Run app container at production server
+      community.docker.docker_container:
+        name: runner
+        image: "{{ DOCKER_USER }}/myboxfuse"
+        ports: "8080:8080"
+        recreate: true
