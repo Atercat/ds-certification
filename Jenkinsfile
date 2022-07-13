@@ -27,7 +27,7 @@ pipeline {
         }
         stage('The Builder instance setting') {
             steps {
-                sshagent(['wsl']) {
+                sshagent(['wsl-work']) {
                     ansiblePlaybook disableHostKeyChecking: true, extras: '-vvv -e BUILDER_IP=${BUILDER_IP}', playbook: 'ansible/main.yaml'
                 }
             }
