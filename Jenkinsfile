@@ -58,7 +58,7 @@ pipeline {
                 REPO_CREDS = credentials('docker')
             }
             steps {
-                sshagent([${KEY_PAIR}]) {
+                sshagent([params.KEY_PAIR]) {
                     ansiblePlaybook playbook: 'ansible/main.yaml',
                         disableHostKeyChecking: true,
                         extras: '''
