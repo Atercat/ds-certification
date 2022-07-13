@@ -77,7 +77,7 @@
     - name: Copy the Dockerfile to the Build-node
       ansible.builtin.copy:
         src: ../files/Dockerfile.runner
-        dest: "{{ repo_path }}"
+        dest: "{{ repo_path }}/Dockerfile"
 
     - name: Login to the repository
       community.docker.docker_login:
