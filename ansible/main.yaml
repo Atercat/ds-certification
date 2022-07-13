@@ -88,7 +88,7 @@
 
     - name: Build a production image and push it to the repository
       community.docker.docker_image:
-        name: "{{ hostvars.localhost.repo_facts.repository.repositoryUri }}"
+        name: "{{ DOCKER_USER }}/myboxfuse"
         source: build
         build:
           path: "{{ repo_path }}"
