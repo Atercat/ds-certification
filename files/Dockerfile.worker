@@ -6,6 +6,8 @@ RUN apk update \
 RUN python3 -m ensurepip --upgrade \
     && python3 -m pip install --upgrade pip \
     && pip3 install ansible
+# Add user for correct Ansbile run as Jenkins
+RUN adduser -s /sbin/nologin -S -D -u 113 jenkins
 
 # Remove ENTRYPOINT
 ENTRYPOINT []
