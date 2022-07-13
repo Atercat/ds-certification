@@ -21,8 +21,16 @@ pipeline {
                             script: 'terraform output ip',
                             returnStdout: true
                         ).trim()
+                        sh 'echo ${BUILDER_IP}'
+                        env.BUILDER_IP = sh(
+                            script: 'terraform output ip',
+                            returnStdout: true
+                        ).trim()
+                        sh 'echo ${BUILDER_IP}'
+                        sh 'echo ${env.BUILDER_IP}'
                     }
                     sh 'echo ${BUILDER_IP}'
+                    sh 'echo ${env.BUILDER_IP}'
                     sh 'terraform output ip'
                     sh 'terraform output -raw ip'
                 }
@@ -33,7 +41,7 @@ pipeline {
                 sh 'echo ${BUILDER_IP}'
                 sshagent(['wsl']) {
                     sh 'echo ${BUILDER_IP}'
-                    ansiblePlaybook disableHostKeyChecking: true, extras: '-vvv -e BUILDER_IP=${BUILDER_IP}', playbook: 'ansible/main.yaml'
+                    //ansiblePlaybook disableHostKeyChecking: true, extras: '-vvv -e BUILDER_IP=${BUILDER_IP}', playbook: 'ansible/main.yaml'
                 }
             }
         }
