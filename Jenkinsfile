@@ -8,7 +8,7 @@ pipeline {
         dockerfile {
             filename 'Dockerfile.agent'
             dir 'files'
-            args '-v files/.terraformrc:/home/jenkins/.terraformrc'
+            args '-v ./files/.terraformrc:/home/jenkins/.terraformrc'
         }
     }
     stages {
