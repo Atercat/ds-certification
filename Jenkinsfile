@@ -4,24 +4,20 @@ pipeline {
 			name: 'OS_USERNAME',
             trim: true,
             description: 'OpenStack user name',
-            required: true
 		)
         password(
 			name: 'OS_PASSWORD',
 			description: 'OpenStack password',
-            required: true
 		)
         string(
 			name: 'OS_PROJECT_ID',
 			trim: true,
 			description: 'OpenStack project ID',
-            required: true
 		)
         string(
 			name: 'KEY_NAME',
 			trim: true,
 			description: 'Cloud SSH-key name',
-            required: true
 		)
         credentials(
             name: 'KEY_PAIR',
