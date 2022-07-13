@@ -1,13 +1,13 @@
 ---
 - name: Filling in inventory
   hosts: localhost
-  become: true
   gather_facts: false
   tasks:
     - name: Add build host
       ansible.builtin.add_host:
         hostname: "{{ BUILDER_IP }}"
         groups: builder
+        ansible_user: ubuntu
 
 
 - name: Preparing the node
