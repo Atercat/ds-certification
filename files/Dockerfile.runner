@@ -1,5 +1,5 @@
 ARG image_name=tomcat:9.0.63-jre8-openjdk-slim-buster
-ARG artifact
-
 FROM ${image_name}
+
+ARG artifact
 ADD ${artifact} /usr/local/tomcat/webapps/ROOT.war

@@ -89,8 +89,8 @@
         build:
           path: "{{ repo_path }}"
           args:
-            artifact: "target/{{ app }}.war"
             image_name: "{{ TOMCAT_IMAGE }}"
+            artifact: "target/{{ app }}.war"
         push: true
 
 
