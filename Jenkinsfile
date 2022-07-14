@@ -26,6 +26,20 @@ pipeline {
 			description: 'OpenStack project ID (for VK)',
 		)
         string(
+			name: 'YC_CLOUD_ID',
+            trim: true,
+            description: 'Yandex cloud ID (yc config list)',
+		)
+        string(
+			name: 'YC_FOLDER_ID',
+			trim: true,
+            description: 'Yandex folder ID',
+		)
+        password(
+			name: 'YC_TOKEN',
+            description: 'Yandex OAuth token',
+		)
+        string(
 			name: 'KEY_NAME',
             defaultValue: 'my_key',
 			trim: true,
