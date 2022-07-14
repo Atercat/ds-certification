@@ -158,7 +158,7 @@ pipeline {
         stage('Show result link') {
             steps {
                 script {
-                    currentBuild.description = "<a href='${BUILDER_IP}'>Open the app</a>"
+                    currentBuild.displayName = "Open http://${RUNNER_IP}"
                 }
             }
         }
