@@ -29,16 +29,14 @@
     - name: Gathering facts for the first time
       ansible.builtin.setup:
 
-    - name: Update packages cache
-      ansible.builtin.apt:
-        update_cache: true
-
     - name: Ensure Docker is installed
       ansible.builtin.apt:
         name:
           - docker.io
           - python3-docker
+          - git
         state: present
+        update_cache: true
 
     - name: Ensure Docker service is running
       ansible.builtin.service:
@@ -70,7 +68,7 @@
     - name: Start a Maven container and build an artifact
       community.docker.docker_container:
         name: builder
-        image: maven:3.6-openjdk-8
+        image: "{{ MAVEN_IMAGE }}"
         volumes: "{{ repo_path }}:/git"
         command: mvn -f /git/pom.xml clean package
         restart: true
@@ -87,12 +85,13 @@
 
     - name: Build a production image and push it to the repository
       community.docker.docker_image:
-        name: "{{ DOCKER_USER }}/myboxfuse"
+        name: "{{ APP_IMAGE }}"
         source: build
         build:
           path: "{{ repo_path }}"
           args:
             artifact: "target/{{ app }}.war"
+            image_name: "{{ TOMCAT_IMAGE }}"
         push: true
 
 
@@ -107,12 +106,12 @@
 
     - name: Remove the old image
       community.docker.docker_image:
-        name: "{{ DOCKER_USER }}/myboxfuse"
+        name: "{{ APP_IMAGE }}"
         state: absent
 
     - name: Run app container at production server
       community.docker.docker_container:
         name: runner
-        image: "{{ DOCKER_USER }}/myboxfuse"
-        ports: "8080:8080"
+        image: "{{ APP_IMAGE }}"
+        ports: "80:8080"
         recreate: true

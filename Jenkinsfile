@@ -1,6 +1,12 @@
 pipeline {
     parameters {
         string(
+			name: 'APP_GIT',
+			defaultValue: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git',
+			trim: true,
+			description: 'Application source code Git repository'
+		)
+        string(
 			name: 'OS_USERNAME',
             trim: true,
             description: 'OpenStack user name',
@@ -39,6 +45,30 @@ pipeline {
 			description: 'Docker registry credentials',
             required: true
         )
+        string(
+			name: 'APP_IMAGE',
+			defaultValue: 'atercat/myboxfuse',
+			trim: true,
+			description: 'App Docker image name: [registry/][username/]imagename[:tag]'
+		)
+        string(
+			name: 'TERRAFORM_IMAGE',
+			defaultValue: 'hashicorp/terraform:1.2.4',
+			trim: true,
+			description: 'Terraform Docker image name'
+		)
+        string(
+			name: 'MAVEN_IMAGE',
+			defaultValue: 'maven:3.6-openjdk-8',
+			trim: true,
+			description: 'Maven Docker image name'
+		)
+        string(
+			name: 'TOMCAT_IMAGE',
+			defaultValue: 'tomcat:9.0.63-jre8-openjdk-slim-buster',
+			trim: true,
+			description: 'Tomcat Docker image name'
+		)
     }
     agent {
         dockerfile {
@@ -46,6 +76,7 @@ pipeline {
             dir 'files'
             // Using a terraform repository mirror instead of the blocked Hashicorp
             args '-v ${WORKSPACE}/files/.terraformrc:/home/jenkins/.terraformrc'
+            additionalBuildArgs  '--build-arg IMAGE_NAME=${TERRAFORM_IMAGE}'
         }
     }
     stages {
@@ -86,6 +117,9 @@ pipeline {
                                     -e DOCKER_REGISTRY=${DOCKER_REGISTRY}
                                     -e DOCKER_USER=${REPO_CRED_USR}
                                     -e DOCKER_PASSWORD=${REPO_CRED_PSW}
+                                    -e MAVEN_IMAGE=${MAVEN_IMAGE}
+                                    -e TOMCAT_IMAGE=${TOMCAT_IMAGE}
+                                    -e APP_IMAGE=${APP_IMAGE}
                                 '''
                         }
                     }

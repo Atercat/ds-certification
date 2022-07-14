@@ -1,4 +1,5 @@
-FROM hashicorp/terraform:1.2.4
+ARG IMAGE_NAME=hashicorp/terraform:1.2.4
+FROM ${IMAGE_NAME}
 
 # Install Ansible
 RUN apk update \
