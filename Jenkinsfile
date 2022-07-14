@@ -54,8 +54,8 @@ pipeline {
                 dir('terraform') {
                     sh '''
                         terraform init &&
-                        terraform plan -var "key_name=${KEY_NAME}" &&
-                        terraform apply -auto-approve
+                        terraform plan -var "key_name=${KEY_NAME}" -out=slyplan &&
+                        terraform apply -auto-approve slyplan 
                     '''
                     script {
                         env.BUILDER_IP = sh returnStdout: true,
