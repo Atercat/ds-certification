@@ -1,11 +1,11 @@
 module "builder" {
-    source = "./provider"
+    source = "../modules/yandex"
     name = "builder"
     pub_key = var.PUB_KEY
 }
 
 module "runner" {
-    source = "./provider"
+    source = "../modules/yandex"
     name = "runner"
     pub_key = var.PUB_KEY
 }

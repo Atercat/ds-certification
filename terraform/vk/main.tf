@@ -1,11 +1,11 @@
 module "builder" {
-    source = "./provider"
+    source = "../modules/vk"
     name = "builder"
     key_name = var.KEY_NAME
 }
 
 module "runner" {
-    source = "./provider"
+    source = "../modules/vk"
     name = "runner"
     key_name = var.KEY_NAME
 }
