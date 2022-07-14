@@ -1,3 +1,7 @@
+variable "KEY_NAME" {
+    type = string
+}
+
 module "builder" {
     source = "../modules/vk"
     name = "builder"
