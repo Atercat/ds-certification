@@ -16,6 +16,7 @@ resource "yandex_compute_instance" "vm" {
 
   network_interface {
     subnet_id = "e9bv6q55u21o7f37i66l"
+    nat       = true
   }
 
   metadata = {
