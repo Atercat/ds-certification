@@ -72,8 +72,8 @@ pipeline {
                     withCredentials([
                         usernamePassword(
                             credentialsId: params.REGISTRY_CRED,
-                            passwordVariable: 'REPO_CRED_USR',
-                            usernameVariable: 'REPO_CRED_PWD'
+                            usernameVariable: 'REPO_CRED_USR',
+                            passwordVariable: 'REPO_CRED_PSW'
                         )
                     ])
                     {
