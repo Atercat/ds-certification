@@ -54,14 +54,13 @@
   hosts: builder
   become: true
   vars:
-    repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
     repo_path: /var/repo
     app: hello-1.0 # todo: extract the name from pom.xml
     war_path: "{{ repo_path }}/target/{{ app }}.war"
   tasks:
     - name: Clone the Git repo
       ansible.builtin.git:
-        repo: "{{ repo }}"
+        repo: "{{ APP_GIT }}"
         dest: "{{ repo_path }}"
         force: true
 

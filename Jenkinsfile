@@ -120,6 +120,7 @@ pipeline {
                                     -e MAVEN_IMAGE=${MAVEN_IMAGE}
                                     -e TOMCAT_IMAGE=${TOMCAT_IMAGE}
                                     -e APP_IMAGE=${APP_IMAGE}
+                                    -e APP_GIT=${APP_GIT}
                                 '''
                         }
                     }
