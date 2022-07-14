@@ -3,7 +3,7 @@ pipeline {
         choice(
             name: "PROVIDER",
             choices: ["vk", "yandex"],
-            description: "Sample multi-choice parameter"
+            description: "The cloud provider to build an infrastructure on"
         )
         string(
 			name: 'APP_GIT',
