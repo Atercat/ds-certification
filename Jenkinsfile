@@ -54,7 +54,7 @@ pipeline {
                 dir('terraform') {
                     sh '''
                         terraform init &&
-                        terraform plan -var "key_name=${params.KEY_NAME}" &&
+                        terraform plan -var "key_name=${KEY_NAME}" &&
                         terraform apply -auto-approve
                     '''
                     script {
