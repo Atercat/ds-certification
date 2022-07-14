@@ -15,7 +15,7 @@ resource "yandex_compute_instance" "vm" {
   }
 
   network_interface {
-    subnet_id = "default-ru-central1-a"
+    subnet_id = "e9bv6q55u21o7f37i66l"
   }
 
   metadata = {
