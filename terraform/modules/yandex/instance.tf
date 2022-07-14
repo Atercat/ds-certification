@@ -15,11 +15,15 @@ resource "yandex_compute_instance" "vm" {
   }
 
   network_interface {
-    subnet_id = "e9bv6q55u21o7f37i66l"
+    subnet_id = data.yandex_vpc_subnet.a.subnet_id
     nat       = true
   }
 
   metadata = {
     ssh-keys = "ubuntu:${var.pub_key}"
   }
+}
+
+data "yandex_vpc_subnet" "a" {
+  name = "default-ru-central1-a"
 }
