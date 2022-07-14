@@ -20,6 +20,6 @@ variable "image_id" {
     description = "openstack image list"
 }
 
-variable "key_pair" {
+variable "key_name" {
     type = string
 }
