@@ -155,5 +155,12 @@ pipeline {
                 }
             }
         }
+        stage('Show result link') {
+            steps {
+                script {
+                    currentBuild.description = "<a href='${BUILDER_IP}'>Open the app</a>"
+                }
+            }
+        }
     }
 }
