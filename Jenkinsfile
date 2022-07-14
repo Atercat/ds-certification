@@ -40,7 +40,7 @@ pipeline {
             description: 'Yandex OAuth token',
 		)
         string(
-			name: 'TF_KEY_NAME',
+			name: 'KEY_NAME',
             defaultValue: 'my_key',
 			trim: true,
 			description: 'Existent cloud SSH-key name (for VK)',
@@ -49,11 +49,11 @@ pipeline {
             name: 'KEY_PRIV',
             defaultValue: '',
             credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
-			description: 'Private SSH-key credential corresponding to the TF_KEY_NAME parameter',
+			description: 'Private SSH-key credential corresponding to the KEY_NAME parameter',
             required: true
         )
         string(
-			name: 'TF_KEY_PUB',
+			name: 'KEY_PUB',
 			defaultValue: 'ssh-rsa AAAA/ChangeMe',
 			trim: true,
 			description: 'Public SSH-key corresponding to the KEY_PRIV (for Yandex)'
@@ -110,6 +110,8 @@ pipeline {
             steps {
                 dir("terraform/${PROVIDER}") {
                     sh '''
+                        export TF_KEY_PUB=${KEY_PUB}
+                        export TF_KEY_NAME=${KEY_NAME}
                         terraform init &&
                         terraform plan &&
                         terraform apply -auto-approve
