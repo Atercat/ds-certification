@@ -110,8 +110,8 @@ pipeline {
             steps {
                 dir("terraform/${PROVIDER}") {
                     sh '''
-                        export TF_KEY_PUB=${KEY_PUB}
-                        export TF_KEY_NAME=${KEY_NAME}
+                        export TF_VAR_KEY_PUB=${KEY_PUB}
+                        export TF_VAR_KEY_NAME=${KEY_NAME}
                         terraform init &&
                         terraform plan &&
                         terraform apply -auto-approve
