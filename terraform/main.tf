@@ -1,7 +1,3 @@
-variable "provider" {
-    type = string
-}
-
 variable "key_name" {
     type = string
 }
@@ -11,13 +7,13 @@ variable "pub_key" {
 }
 
 module "builder" {
-    source = "./modules/${var.provider}"
+    source = "./modules/provider"
     name = "builder"
     key_pair = var.key_name
 }
 
 module "runner" {
-    source = "./modules/${var.provider}"
+    source = "./modules/provider"
     name = "runner"
     key_pair = var.key_name
 }
