@@ -111,7 +111,7 @@ pipeline {
                 dir('terraform') {
                     // As long as variables are not allowed in module source
                     // select particular module with a symbolic link
-                    sh 'rm -f modules/provider && ln -s modules/${PROVIDER} provider'
+                    sh 'rm -f provider && ln -s modules/${PROVIDER} provider'
                     sh '''
                         terraform init &&
                         terraform plan \
