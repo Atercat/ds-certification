@@ -15,7 +15,7 @@ resource "yandex_compute_instance" "vm" {
   }
 
   network_interface {
-    subnet_id = "${yandex_vpc_network.default.subnet_ids[0]}"
+    subnet_id = "${data.yandex_vpc_network.default.subnet_ids[0]}"
   }
 
   metadata = {
