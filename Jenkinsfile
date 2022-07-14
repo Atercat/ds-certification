@@ -40,7 +40,7 @@ pipeline {
             description: 'Yandex OAuth token',
 		)
         string(
-			name: 'KEY_NAME',
+			name: 'TF_KEY_NAME',
             defaultValue: 'my_key',
 			trim: true,
 			description: 'Existent cloud SSH-key name (for VK)',
@@ -49,11 +49,11 @@ pipeline {
             name: 'KEY_PRIV',
             defaultValue: '',
             credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
-			description: 'Private SSH-key credential corresponding to the KEY_NAME parameter',
+			description: 'Private SSH-key credential corresponding to the TF_KEY_NAME parameter',
             required: true
         )
         string(
-			name: 'KEY_PUB',
+			name: 'TF_KEY_PUB',
 			defaultValue: 'ssh-rsa AAAA/ChangeMe',
 			trim: true,
 			description: 'Public SSH-key corresponding to the KEY_PRIV (for Yandex)'
@@ -108,17 +108,11 @@ pipeline {
     stages {
         stage('Provision instances') {
             steps {
-                dir('terraform') {
-                    // As long as variables are not allowed in module source
-                    // select particular module with a symbolic link
-                    sh 'rm -f provider && ln -s modules/${PROVIDER} provider'
+                dir("terraform/${PROVIDER}") {
                     sh '''
                         terraform init &&
-                        terraform plan \
-                            -var "key_name=${KEY_NAME}" \
-                            -var "pub_key=${KEY_PUB}" \
-                            -out=slyplan &&
-                        terraform apply -auto-approve slyplan 
+                        terraform plan &&
+                        terraform apply -auto-approve
                     '''
                     script {
                         env.BUILDER_IP = sh returnStdout: true,
