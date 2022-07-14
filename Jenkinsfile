@@ -1,5 +1,10 @@
 pipeline {
     parameters {
+        choice(
+            name: "PROVIDER",
+            choices: ["vk", "yandex"],
+            description: "Sample multi-choice parameter"
+        )
         string(
 			name: 'APP_GIT',
 			defaultValue: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git',
@@ -9,29 +14,36 @@ pipeline {
         string(
 			name: 'OS_USERNAME',
             trim: true,
-            description: 'OpenStack user name',
+            description: 'OpenStack user name (for VK)',
 		)
         password(
 			name: 'OS_PASSWORD',
-			description: 'OpenStack password',
+			description: 'OpenStack password (for VK)',
 		)
         string(
 			name: 'OS_PROJECT_ID',
 			trim: true,
-			description: 'OpenStack project ID',
+			description: 'OpenStack project ID (for VK)',
 		)
         string(
 			name: 'KEY_NAME',
+            defaultValue: 'my_key',
 			trim: true,
-			description: 'Cloud SSH-key name',
+			description: 'Existent cloud SSH-key name (for VK)',
 		)
         credentials(
-            name: 'KEY_PAIR',
+            name: 'KEY_PRIV',
             defaultValue: '',
             credentialType: 'com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey',
-			description: 'Key pair credential corresponding to the KEY_NAME parameter',
+			description: 'Private SSH-key credential corresponding to the KEY_NAME parameter',
             required: true
         )
+        string(
+			name: 'KEY_PUB',
+			defaultValue: 'ssh-rsa AAAA/ChangeMe',
+			trim: true,
+			description: 'Public SSH-key corresponding to the KEY_PRIV (for Yandex)'
+		)
         string(
 			name: 'DOCKER_REGISTRY',
 			defaultValue: 'https://index.docker.io/v1/',
@@ -85,7 +97,11 @@ pipeline {
                 dir('terraform') {
                     sh '''
                         terraform init &&
-                        terraform plan -var "key_name=${KEY_NAME}" -out=slyplan &&
+                        terraform plan \
+                            -var "provider=${PROVIDER}" \
+                            -var "key_name=${KEY_NAME}" \
+                            -var "pub_key=${KEY_PUB}" \
+                            -out=slyplan &&
                         terraform apply -auto-approve slyplan 
                     '''
                     script {
@@ -108,7 +124,7 @@ pipeline {
                         )
                     ])
                     {
-                        sshagent([params.KEY_PAIR]) {
+                        sshagent([params.KEY_PRIV]) {
                             ansiblePlaybook playbook: 'ansible/main.yaml',
                                 disableHostKeyChecking: true,
                                 extras: '''
