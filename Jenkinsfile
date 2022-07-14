@@ -67,20 +67,28 @@ pipeline {
             }
         }
         stage('Instances setting') {
-            environment {
-                REPO_CRED = credentials(params.REGISTRY_CRED)
-            }
             steps {
-                sshagent([params.KEY_PAIR]) {
-                    ansiblePlaybook playbook: 'ansible/main.yaml',
-                        disableHostKeyChecking: true,
-                        extras: '''
-                            -e BUILDER_IP=${BUILDER_IP}
-                            -e RUNNER_IP=${RUNNER_IP}
-                            -e DOCKER_REGISTRY=${DOCKER_REGISTRY}
-                            -e DOCKER_USER=${REPO_CRED_USR}
-                            -e DOCKER_PASSWORD=${REPO_CRED_PSW}
-                        '''
+                script {
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: params.REGISTRY_CRED,
+                            passwordVariable: 'REPO_CRED_USR',
+                            usernameVariable: 'REPO_CRED_PWD'
+                        )
+                    ])
+                    {
+                        sshagent([params.KEY_PAIR]) {
+                            ansiblePlaybook playbook: 'ansible/main.yaml',
+                                disableHostKeyChecking: true,
+                                extras: '''
+                                    -e BUILDER_IP=${BUILDER_IP}
+                                    -e RUNNER_IP=${RUNNER_IP}
+                                    -e DOCKER_REGISTRY=${DOCKER_REGISTRY}
+                                    -e DOCKER_USER=${REPO_CRED_USR}
+                                    -e DOCKER_PASSWORD=${REPO_CRED_PSW}
+                                '''
+                        }
+                    }
                 }
             }
         }
