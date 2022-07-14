@@ -7,13 +7,13 @@ variable "pub_key" {
 }
 
 module "builder" {
-    source = "./modules/provider"
+    source = "./provider"
     name = "builder"
     key_pair = var.key_name
 }
 
 module "runner" {
-    source = "./modules/provider"
+    source = "./provider"
     name = "runner"
     key_pair = var.key_name
 }
