@@ -1,3 +1,7 @@
+variable "KEY_PUB" {
+    type = string
+}
+
 module "builder" {
     source = "../modules/yandex"
     name = "builder"
